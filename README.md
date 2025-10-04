@@ -232,7 +232,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 👨‍💻 **Author**
+<!-- ## 👨‍💻 **Author** -->
 
 <!-- **Sri Shakthi**
 - 📧 Email: shakthisri2729@gmail.com
