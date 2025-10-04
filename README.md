@@ -118,10 +118,6 @@ aws-terraform-learning/
 ├── 📄 terraform.tfvars.example         # Example variable values
 ├── 📄 .gitignore                       # Git ignore rules
 ├── 📄 README.md                        # This file
-├── 📄 INTERVIEW_PREPARATION.md         # Comprehensive interview guide
-├── 📄 TERRAFORM_CODE_BREAKDOWN.md      # Line-by-line code explanations
-├── 📄 INTERVIEW_QA_GUIDE.md           # 18 realistic interview scenarios
-├── 📄 QUICK_REFERENCE.md              # Quick reference guide
 ├── 🔧 deploy.sh                       # Deployment script
 ├── 🔧 shutdown.sh                     # Cost management script
 ├── 🔧 restart.sh                      # Quick restart script
