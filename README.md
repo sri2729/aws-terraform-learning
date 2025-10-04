@@ -4,7 +4,7 @@
 [![AWS](https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com)
 [![Infrastructure as Code](https://img.shields.io/badge/Infrastructure%20as%20Code-FF6B6B?style=for-the-badge&logo=git&logoColor=white)](https://en.wikipedia.org/wiki/Infrastructure_as_code)
 
-<!-- > **Production-ready AWS infrastructure built with Terraform for learning and demonstrating real-world DevOps skills.** -->
+> **Production-ready AWS infrastructure built with Terraform for learning and demonstrating real-world DevOps skills.**
 
 ## 🌐 **Live Demo**
 
@@ -60,7 +60,7 @@ Internet → CloudFront (CDN) → WAF (Security) → S3 (Storage) → Website Fi
 
 ---
 
-<!-- ## 🚀 **Quick Start**
+## 🚀 **Quick Start**
 
 ### **Prerequisites**
 - [Terraform](https://terraform.io/downloads.html) >= 1.0
@@ -104,7 +104,7 @@ Internet → CloudFront (CDN) → WAF (Security) → S3 (Storage) → Website Fi
 
 # Deploy cost-optimized version
 ./cost-optimized-deploy.sh
-``` -->
+```
 
 ---
 
@@ -118,6 +118,10 @@ aws-terraform-learning/
 ├── 📄 terraform.tfvars.example         # Example variable values
 ├── 📄 .gitignore                       # Git ignore rules
 ├── 📄 README.md                        # This file
+├── 📄 INTERVIEW_PREPARATION.md         # Comprehensive interview guide
+├── 📄 TERRAFORM_CODE_BREAKDOWN.md      # Line-by-line code explanations
+├── 📄 INTERVIEW_QA_GUIDE.md           # 18 realistic interview scenarios
+├── 📄 QUICK_REFERENCE.md              # Quick reference guide
 ├── 🔧 deploy.sh                       # Deployment script
 ├── 🔧 shutdown.sh                     # Cost management script
 ├── 🔧 restart.sh                      # Quick restart script
@@ -185,14 +189,14 @@ This project provides hands-on experience with:
 5. **DevOps Practices**: CI/CD, monitoring, and operational excellence
 6. **Real-World Scenarios**: Production-ready infrastructure patterns
 
+---
 
-
-<!-- ## 📚 **Documentation**
+## 📚 **Documentation**
 
 - **[Interview Preparation Guide](INTERVIEW_PREPARATION.md)** - Complete project overview and architecture
 - **[Terraform Code Breakdown](TERRAFORM_CODE_BREAKDOWN.md)** - Line-by-line code explanations
 - **[Interview Q&A Guide](INTERVIEW_QA_GUIDE.md)** - 18 realistic interview scenarios
-- **[Quick Reference](QUICK_REFERENCE.md)** - One-page summary for interviews -->
+- **[Quick Reference](QUICK_REFERENCE.md)** - One-page summary for interviews
 
 ---
 
@@ -228,14 +232,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-<!-- ## 👨‍💻 **Author** -->
+## 👨‍💻 **Author**
 
-<!-- **Sri Shakthi**
+**Sri Shakthi**
 - 📧 Email: shakthisri2729@gmail.com
 - 💼 LinkedIn: [Your LinkedIn Profile]
-- 🐙 GitHub: [Your GitHub Profile] -->
+- 🐙 GitHub: [Your GitHub Profile]
 
-
+---
 
 ## 🙏 **Acknowledgments**
 
@@ -243,14 +247,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Terraform community for excellent documentation
 - HashiCorp for creating amazing Infrastructure as Code tools
 
+---
 
-
-<!-- ## 📊 **Repository Stats**
+## 📊 **Repository Stats**
 
 ![GitHub stars](https://img.shields.io/github/stars/yourusername/aws-terraform-learning?style=social)
 ![GitHub forks](https://img.shields.io/github/forks/yourusername/aws-terraform-learning?style=social)
 ![GitHub issues](https://img.shields.io/github/issues/yourusername/aws-terraform-learning)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/yourusername/aws-terraform-learning) -->
+![GitHub pull requests](https://img.shields.io/github/issues-pr/yourusername/aws-terraform-learning)
 
 ---
 
@@ -258,6 +262,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **⭐ Star this repository if you found it helpful!**
 
-<!-- Made with ❤️ for the DevOps community -->
+Made with ❤️ for the DevOps community
 
 </div>
