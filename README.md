@@ -189,7 +189,7 @@ This project provides hands-on experience with:
 5. **DevOps Practices**: CI/CD, monitoring, and operational excellence
 6. **Real-World Scenarios**: Production-ready infrastructure patterns
 
----
+
 
 <!-- ## 📚 **Documentation**
 
@@ -239,7 +239,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - 💼 LinkedIn: [Your LinkedIn Profile]
 - 🐙 GitHub: [Your GitHub Profile] -->
 
----
+
 
 ## 🙏 **Acknowledgments**
 
