@@ -2,9 +2,9 @@
 
 ## 📋 **Project Overview**
 
-**Project Name**: AWS Static Website with Terraform Infrastructure  
-**Purpose**: Learn Terraform with AWS by building a production-ready static website  
-**Architecture**: Multi-tier, secure, scalable web infrastructure  
+**Project Name**: AWS Full-Stack Website with Terraform Infrastructure  
+**Purpose**: Learn Terraform with AWS by building a production-ready static website with dynamic backend functionality  
+**Architecture**: Multi-tier, secure, scalable web infrastructure with serverless backend  
 
 ---
 
@@ -17,7 +17,9 @@ WAF (Security) → Rate Limiting & Protection
     ↓
 VPC (Network) → Public/Private Subnets
     ↓
-DynamoDB (Database) → Contact Forms & Analytics
+API Gateway → Lambda Functions → DynamoDB (Database)
+    ↓
+Contact Forms & Analytics → Serverless Backend Processing
 ```
 
 ---
@@ -34,6 +36,8 @@ DynamoDB (Database) → Contact Forms & Analytics
 ### **AWS Services:**
 - **S3**: Static website hosting
 - **CloudFront**: Global CDN
+- **API Gateway**: RESTful API management
+- **Lambda**: Serverless compute functions
 - **DynamoDB**: NoSQL database
 - **WAF**: Web Application Firewall
 - **VPC**: Virtual Private Cloud
@@ -58,6 +62,8 @@ aws-terraform-learning/
 │   ├── vpc/                   # Network infrastructure
 │   ├── s3/                    # Storage for website
 │   ├── cloudfront/            # CDN distribution
+│   ├── apigateway/            # REST API management
+│   ├── lambda/                # Serverless functions
 │   ├── dynamodb/              # Database tables
 │   └── waf/                   # Security layer
 └── static-website/            # Website files
@@ -166,7 +172,34 @@ aws s3 sync static-website/ s3://your-bucket-name/
 - XSS protection
 - Custom rules
 
-### **5. Amazon VPC (Virtual Private Cloud)**
+### **5. Amazon API Gateway**
+**WHAT**: Fully managed API service  
+**WHY**: Create, publish, and manage RESTful APIs  
+**HOW**: Acts as a front door for backend services  
+
+**Key Features:**
+- RESTful API creation
+- CORS configuration
+- Rate limiting and throttling
+- Request/response transformation
+- Integration with Lambda functions
+- SSL/TLS termination
+- API versioning and stages
+
+### **6. AWS Lambda**
+**WHAT**: Serverless compute service  
+**WHY**: Run code without managing servers  
+**HOW**: Execute functions in response to events  
+
+**Key Features:**
+- Pay-per-request pricing
+- Automatic scaling
+- Multiple runtime support (Python, Node.js, etc.)
+- Event-driven architecture
+- Integration with other AWS services
+- Cold start optimization
+
+### **7. Amazon VPC (Virtual Private Cloud)**
 **WHAT**: Isolated network environment  
 **WHY**: Secure network foundation for AWS resources  
 **HOW**: Creates private networks with subnets and routing  
@@ -367,19 +400,108 @@ resource "aws_cloudfront_distribution" "main" {
 
 **INTERVIEW ANSWER**: "CloudFront creates a global CDN that caches content at edge locations. I configure it to serve from S3, force HTTPS, and cache GET/HEAD requests for better performance."
 
+### **API Gateway Module (modules/apigateway/main.tf)**
+
+```terraform
+resource "aws_api_gateway_rest_api" "main" {
+  name        = "${var.project_name}-${var.environment}-api"
+  description = "API for ${var.project_name} website"
+
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
+}
+
+resource "aws_api_gateway_integration" "contact_post" {
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  resource_id = aws_api_gateway_resource.contact.id
+  http_method = aws_api_gateway_method.contact_post.http_method
+  integration_http_method = "POST"
+  type                   = "AWS_PROXY"
+  uri                    = var.contact_form_lambda_invoke_arn
+}
+```
+
+**EXPLANATION:**
+- `rest_api`: Creates the API Gateway REST API
+- `endpoint_configuration`: Sets regional endpoint for better performance
+- `integration`: Connects API Gateway to Lambda functions
+- `AWS_PROXY`: Lambda proxy integration for direct function invocation
+- `invoke_arn`: Lambda function's invoke ARN for API Gateway
+
+**INTERVIEW ANSWER**: "API Gateway creates a RESTful API that acts as a front door for my Lambda functions. I use AWS_PROXY integration for direct Lambda invocation, which simplifies the architecture and reduces latency."
+
+### **Lambda Module (modules/lambda/main.tf)**
+
+```terraform
+resource "aws_lambda_function" "contact_form" {
+  filename         = "contact_form.zip"
+  function_name    = "${var.project_name}-${var.environment}-contact-form"
+  role            = aws_iam_role.lambda_role.arn
+  handler         = "contact_form.lambda_handler"
+  runtime         = "python3.9"
+  source_code_hash = data.archive_file.contact_form_zip.output_base64sha256
+}
+
+resource "aws_iam_role" "lambda_role" {
+  name = "${var.project_name}-${var.environment}-lambda-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+```
+
+**EXPLANATION:**
+- `lambda_function`: Creates serverless function
+- `filename`: ZIP file containing function code
+- `role`: IAM role for Lambda execution permissions
+- `handler`: Function entry point
+- `runtime`: Python 3.9 runtime environment
+- `assume_role_policy`: Allows Lambda service to assume the role
+
+**INTERVIEW ANSWER**: "Lambda functions provide serverless compute for my backend logic. I create IAM roles with least privilege access, and use Python runtime for processing contact form submissions."
+
+---
+
+## 🔗 **API Endpoints & Functionality**
+
+### **Contact Form API**
+- **Endpoint**: `https://t2engatoq6.execute-api.us-east-1.amazonaws.com/dev/contact`
+- **Method**: POST
+- **Purpose**: Handle contact form submissions
+- **Lambda Function**: `aws-terraform-learning-dev-contact-form`
+- **Data Flow**: API Gateway → Lambda → DynamoDB
+
+### **CORS Configuration**
+- **Headers**: Content-Type, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token
+- **Methods**: OPTIONS, POST
+- **Origins**: * (allows all origins for development)
+
 ---
 
 ## 🎯 **Interview Q&A Scenarios**
 
 ### **Q1: "Explain your Terraform project architecture"**
 
-**A**: "I built a production-ready static website infrastructure using Terraform and AWS. The architecture includes:
+**A**: "I built a production-ready full-stack website infrastructure using Terraform and AWS. The architecture includes:
 
 1. **S3** for static website hosting (HTML, CSS, JS files)
 2. **CloudFront** as a global CDN for fast content delivery
-3. **WAF** for security and rate limiting
-4. **DynamoDB** for storing contact form submissions and analytics
-5. **VPC** with public/private subnets for network security
+3. **API Gateway** for RESTful API management
+4. **Lambda** for serverless backend processing
+5. **DynamoDB** for storing contact form submissions
+6. **WAF** for security and rate limiting
+7. **VPC** with public/private subnets for network security
 
 The project demonstrates Infrastructure as Code principles with modular Terraform configurations. Each service is organized into modules for reusability and maintainability."
 
@@ -389,7 +511,9 @@ The project demonstrates Infrastructure as Code principles with modular Terrafor
 
 - **S3**: Perfect for static websites - no server management, automatic scaling, cost-effective
 - **CloudFront**: Provides global performance, SSL termination, and DDoS protection
-- **DynamoDB**: Serverless NoSQL database ideal for contact forms and simple data storage
+- **API Gateway**: Manages RESTful APIs with built-in security, rate limiting, and CORS
+- **Lambda**: Serverless compute for backend logic - pay per request, automatic scaling
+- **DynamoDB**: Serverless NoSQL database ideal for contact form data storage
 - **WAF**: Essential security layer to protect against common web attacks
 - **VPC**: Network isolation and security best practices
 
@@ -401,9 +525,11 @@ This combination follows AWS Well-Architected Framework principles for security,
 
 1. **WAF**: Rate limiting (2000 requests per IP), SQL injection protection, XSS filtering
 2. **CloudFront**: SSL/HTTPS enforcement, DDoS protection
-3. **S3**: Bucket policies restrict access to CloudFront only
-4. **VPC**: Network isolation with public/private subnets
-5. **DynamoDB**: Encryption at rest and in transit
+3. **API Gateway**: CORS configuration, request validation, API key management
+4. **Lambda**: IAM roles with least privilege access, VPC integration for private functions
+5. **S3**: Bucket policies restrict access to CloudFront only
+6. **VPC**: Network isolation with public/private subnets
+7. **DynamoDB**: Encryption at rest and in transit
 
 The security is defense-in-depth, meaning if one layer fails, others provide protection."
 
@@ -413,24 +539,29 @@ The security is defense-in-depth, meaning if one layer fails, others provide pro
 
 1. **S3**: Automatically handles any amount of traffic
 2. **CloudFront**: Global edge locations handle traffic spikes
-3. **DynamoDB**: Auto-scaling based on demand
-4. **WAF**: Scales automatically with CloudFront
+3. **API Gateway**: Auto-scales to handle millions of requests
+4. **Lambda**: Automatically scales based on concurrent executions
+5. **DynamoDB**: Auto-scaling based on demand
+6. **WAF**: Scales automatically with CloudFront
 
 For future scaling, I could add:
 - Auto Scaling Groups for dynamic compute
 - Application Load Balancer for multiple instances
 - RDS for complex database needs
-- Lambda functions for serverless compute"
+- Step Functions for complex workflows
+- EventBridge for event-driven architecture"
 
 ### **Q5: "Explain your cost optimization strategies"**
 
 **A**: "I implemented several cost optimization measures:
 
-1. **Free Tier Usage**: S3, CloudFront, DynamoDB within free limits
+1. **Free Tier Usage**: S3, CloudFront, API Gateway, Lambda, DynamoDB within free limits
 2. **S3 Lifecycle Policies**: Automatically delete old versions after 30 days
 3. **CloudFront Caching**: Reduces origin requests (lower S3 costs)
-4. **DynamoDB On-Demand**: Pay only for actual usage
-5. **Cost Management Scripts**: Easy infrastructure shutdown/restart
+4. **Lambda**: Pay-per-request pricing, no idle costs
+5. **API Gateway**: Pay per API call, no base costs
+6. **DynamoDB On-Demand**: Pay only for actual usage
+7. **Cost Management Scripts**: Easy infrastructure shutdown/restart
 
 I also created cost-optimized versions that remove expensive components like NAT Gateway for development environments."
 
@@ -495,9 +626,11 @@ aws cloudfront create-invalidation --distribution-id YOUR_ID --paths "/*"
 ### **AWS Services Knowledge:**
 1. **S3**: Object storage, static website hosting
 2. **CloudFront**: Global CDN, performance optimization
-3. **DynamoDB**: NoSQL database, serverless
-4. **WAF**: Web security, traffic filtering
-5. **VPC**: Network isolation, security
+3. **API Gateway**: RESTful API management, serverless
+4. **Lambda**: Serverless compute, event-driven
+5. **DynamoDB**: NoSQL database, serverless
+6. **WAF**: Web security, traffic filtering
+7. **VPC**: Network isolation, security
 
 ### **Best Practices:**
 1. **Security**: Defense in depth, least privilege

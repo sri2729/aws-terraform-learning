@@ -69,3 +69,20 @@ output "waf_web_acl_arn" {
   description = "ARN of the WAF Web ACL"
   value       = module.waf.web_acl_arn
 }
+
+# API Gateway Outputs
+output "api_gateway_url" {
+  description = "URL of the API Gateway"
+  value       = module.apigateway.api_gateway_url
+}
+
+output "contact_endpoint" {
+  description = "Contact form endpoint URL"
+  value       = module.apigateway.contact_endpoint
+}
+
+# Lambda Function Outputs
+output "contact_form_function_name" {
+  description = "Name of the contact form Lambda function"
+  value       = module.lambda.contact_form_function_name
+}

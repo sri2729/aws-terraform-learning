@@ -128,11 +128,14 @@ window.addEventListener('load', function() {
     }, 100);
 });
 
-// Contact Form Handler
+// API Configuration
+const API_BASE_URL = 'https://t2engatoq6.execute-api.us-east-1.amazonaws.com/dev';
+
+// Contact Form Handler with Real API
 document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             // Get form data
@@ -141,51 +144,42 @@ document.addEventListener('DOMContentLoaded', function() {
             const email = formData.get('email');
             const message = formData.get('message');
             
-            // Simulate saving to DynamoDB (in real implementation, this would call AWS API)
-            console.log('Contact form submitted:', { name, email, message });
+            // Show loading state
+            const submitBtn = contactForm.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
             
-            // Show success message
-            alert('Thank you for your message! In a real implementation, this would be saved to DynamoDB.');
-            
-            // Reset form
-            contactForm.reset();
+            try {
+                // Call API Gateway endpoint
+                const response = await fetch(`${API_BASE_URL}/contact`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, email, message })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    alert('Thank you for your message! It has been saved successfully.');
+                    contactForm.reset();
+                } else {
+                    throw new Error(result.error || 'Failed to submit form');
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                alert('Sorry, there was an error submitting your message. Please try again.');
+            } finally {
+                // Reset button state
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
         });
     }
     
-    // Visitor Counter (simulated)
-    updateVisitorCounter();
 });
-
-// Simulate visitor counter (in real implementation, this would fetch from DynamoDB)
-function updateVisitorCounter() {
-    // Simulate visitor data
-    const totalVisitors = Math.floor(Math.random() * 1000) + 500;
-    const todayVisitors = Math.floor(Math.random() * 50) + 10;
-    
-    const totalElement = document.getElementById('totalVisitors');
-    const todayElement = document.getElementById('todayVisitors');
-    
-    if (totalElement) {
-        animateCounter(totalElement, totalVisitors);
-    }
-    if (todayElement) {
-        animateCounter(todayElement, todayVisitors);
-    }
-}
-
-// Animate counter numbers
-function animateCounter(element, target) {
-    let current = 0;
-    const increment = target / 50;
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            current = target;
-            clearInterval(timer);
-        }
-        element.textContent = Math.floor(current);
-    }, 30);
-}
 
 // Add keyboard navigation
 document.addEventListener('keydown', function(e) {

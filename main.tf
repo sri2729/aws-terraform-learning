@@ -65,6 +65,26 @@ module "waf" {
   environment  = var.environment
 }
 
+# Lambda Functions Module
+module "lambda" {
+  source = "./modules/lambda"
+  
+  project_name         = var.project_name
+  environment          = var.environment
+  dynamodb_table_name  = module.dynamodb.table_name
+  dynamodb_table_arn   = module.dynamodb.table_arn
+}
+
+# API Gateway Module
+module "apigateway" {
+  source = "./modules/apigateway"
+  
+  project_name                        = var.project_name
+  environment                         = var.environment
+  contact_form_lambda_invoke_arn      = module.lambda.contact_form_invoke_arn
+  contact_form_lambda_function_name   = module.lambda.contact_form_function_name
+}
+
 # CloudFront Module
 module "cloudfront" {
   source = "./modules/cloudfront"
