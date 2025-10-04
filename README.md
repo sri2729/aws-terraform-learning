@@ -247,7 +247,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Terraform community for excellent documentation
 - HashiCorp for creating amazing Infrastructure as Code tools
 
----
+
 
 <!-- ## 📊 **Repository Stats**
 
@@ -262,6 +262,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **⭐ Star this repository if you found it helpful!**
 
-Made with ❤️ for the DevOps community
+<!-- Made with ❤️ for the DevOps community -->
 
 </div>
