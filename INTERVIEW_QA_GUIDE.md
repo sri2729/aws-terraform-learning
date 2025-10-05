@@ -9,7 +9,7 @@
 ### **Q1: "Tell me about yourself and your experience with Terraform"**
 
 **Perfect Answer:**
-"I'm passionate about Infrastructure as Code and cloud technologies. I recently completed a comprehensive AWS project using Terraform where I built a full-stack serverless website infrastructure. The project demonstrates my understanding of multiple AWS services including S3, CloudFront, API Gateway, Lambda, DynamoDB, WAF, and VPC. I used Terraform modules to create reusable, maintainable infrastructure code with both static hosting and dynamic serverless backend functionality. This experience taught me the importance of security, cost optimization, and scalability in cloud architecture."
+"I'm passionate about Infrastructure as Code and cloud technologies. I recently completed a comprehensive AWS project using Terraform where I built a production-ready static website infrastructure. The project demonstrates my understanding of multiple AWS services including S3, CloudFront, DynamoDB, WAF, and VPC. I used Terraform modules to create reusable, maintainable infrastructure code. This experience taught me the importance of security, cost optimization, and scalability in cloud architecture."
 
 **Key Points to Mention:**
 - Infrastructure as Code principles
@@ -24,23 +24,21 @@
 ### **Q2: "Walk me through your project architecture"**
 
 **Perfect Answer:**
-"I designed a multi-tier, secure architecture for a full-stack serverless website:
+"I designed a multi-tier, secure architecture for a static website:
 
 1. **Frontend Layer**: CloudFront CDN provides global content delivery with SSL termination
-2. **API Layer**: API Gateway handles RESTful API requests with CORS and rate limiting
-3. **Compute Layer**: Lambda functions process contact form submissions serverlessly
-4. **Security Layer**: WAF protects against attacks with rate limiting (2000 requests per IP)
-5. **Storage Layer**: S3 hosts static files with versioning and encryption
-6. **Data Layer**: DynamoDB stores contact form data with encryption
-7. **Network Layer**: VPC with public/private subnets for security isolation
+2. **Security Layer**: WAF protects against attacks with rate limiting (2000 requests per IP)
+3. **Storage Layer**: S3 hosts static files with versioning and encryption
+4. **Data Layer**: DynamoDB stores contact forms and visitor analytics
+5. **Network Layer**: VPC with public/private subnets for security isolation
 
-The flow is: User → CloudFront → WAF → S3 (static files) + API Gateway → Lambda → DynamoDB (dynamic data). This architecture follows AWS Well-Architected Framework principles."
+The flow is: User → CloudFront → WAF → S3 → Website files. For dynamic data, JavaScript calls DynamoDB directly. This architecture follows AWS Well-Architected Framework principles."
 
 **Visual Aid**: Draw this on a whiteboard:
 ```
-User → CloudFront → WAF → S3 (Static Files)
+User → CloudFront → WAF → S3
                 ↓
-            API Gateway → Lambda → DynamoDB
+            DynamoDB
 ```
 
 ### **Q3: "Why did you choose these specific AWS services?"**
@@ -50,13 +48,11 @@ User → CloudFront → WAF → S3 (Static Files)
 
 - **S3**: Perfect for static websites - no server management, automatic scaling, cost-effective storage
 - **CloudFront**: Global CDN provides low latency worldwide, handles traffic spikes, includes DDoS protection
-- **API Gateway**: Manages RESTful APIs with built-in CORS, rate limiting, and Lambda integration
-- **Lambda**: Serverless compute for contact form processing - no server management, auto-scaling, pay-per-use
-- **DynamoDB**: Serverless NoSQL database ideal for contact form data, auto-scales, encryption at rest
+- **DynamoDB**: Serverless NoSQL database ideal for contact forms and simple analytics, auto-scales
 - **WAF**: Essential security layer protecting against OWASP Top 10, rate limiting, and bot protection
 - **VPC**: Network isolation following security best practices, separates public and private resources
 
-This combination provides security, performance, scalability, and cost optimization with a true serverless architecture."
+This combination provides security, performance, scalability, and cost optimization."
 
 ### **Q4: "How would you scale this architecture for higher traffic?"**
 
@@ -66,8 +62,6 @@ This combination provides security, performance, scalability, and cost optimizat
 **Current Scaling Features:**
 - S3 handles unlimited requests automatically
 - CloudFront scales globally with edge locations
-- API Gateway handles millions of requests with built-in throttling
-- Lambda auto-scales from 0 to thousands of concurrent executions
 - DynamoDB auto-scales based on demand
 
 **Additional Scaling Options:**
@@ -93,8 +87,6 @@ modules/
 ├── vpc/          # Network infrastructure
 ├── s3/           # Storage and website hosting
 ├── cloudfront/   # CDN distribution
-├── apigateway/   # API management and routing
-├── lambda/       # Serverless compute functions
 ├── dynamodb/     # Database tables
 └── waf/          # Security layer
 ```
@@ -225,17 +217,15 @@ Security is an ongoing process, not a one-time implementation."
 "Cost management is crucial for cloud projects. Here's my approach:
 
 **Current Cost Structure:**
-- **Free Tier Usage**: S3 (5GB), CloudFront (1TB), API Gateway (1M requests), Lambda (1M requests), DynamoDB (25GB), WAF (1M requests)
+- **Free Tier Usage**: S3 (5GB), CloudFront (1TB), DynamoDB (25GB), WAF (1M requests)
 - **Main Cost**: NAT Gateway (~$45/month)
-- **Minimal Costs**: Data transfer, Lambda execution time, DynamoDB on-demand usage
+- **Minimal Costs**: Data transfer, DynamoDB on-demand usage
 
 **Cost Optimization Strategies:**
 1. **Lifecycle Policies**: S3 automatically deletes old versions after 30 days
 2. **CloudFront Caching**: Reduces origin requests, lowering S3 costs
-3. **Lambda Optimization**: Pay only for actual execution time, automatic scaling to zero
-4. **API Gateway Throttling**: Built-in rate limiting prevents cost spikes
-5. **DynamoDB On-Demand**: Pay only for actual usage
-6. **Development Environment**: Cost-optimized version without NAT Gateway
+3. **DynamoDB On-Demand**: Pay only for actual usage
+4. **Development Environment**: Cost-optimized version without NAT Gateway
 
 **Cost Management Tools:**
 - AWS Cost Explorer for spending analysis
@@ -256,11 +246,9 @@ I created scripts to easily destroy infrastructure when not needed, saving costs
 
 **Performance Optimizations:**
 1. **CloudFront**: Custom cache behaviors for different content types
-2. **API Gateway**: Caching for API responses, custom authorizers
-3. **Lambda**: Provisioned concurrency for predictable workloads
-4. **S3**: Intelligent Tiering for automatic storage class optimization
-5. **DynamoDB**: Provisioned capacity for predictable workloads
-6. **Monitoring**: CloudWatch dashboards and alarms
+2. **S3**: Intelligent Tiering for automatic storage class optimization
+3. **DynamoDB**: Provisioned capacity for predictable workloads
+4. **Monitoring**: CloudWatch dashboards and alarms
 
 **Security Enhancements:**
 1. **AWS Shield**: Advanced DDoS protection
@@ -296,7 +284,6 @@ The current architecture provides a solid foundation that can be enhanced based 
 3. **Apply**: `terraform apply` creates the infrastructure
 4. **Upload**: `aws s3 sync` uploads website files
 5. **Invalidate**: `aws cloudfront create-invalidation` clears CDN cache
-6. **Test**: Verify API Gateway endpoints and Lambda functions
 
 **Infrastructure Management:**
 - **State Tracking**: Terraform state file tracks all resources
@@ -332,7 +319,6 @@ This approach ensures reliable, repeatable deployments with minimal downtime."
 **Types of Changes:**
 - **Infrastructure Changes**: Modify Terraform files, run `terraform apply`
 - **Website Updates**: Upload new files to S3, invalidate CloudFront cache
-- **API Changes**: Update Lambda functions, redeploy API Gateway
 - **Configuration Changes**: Update variables, redeploy affected modules
 
 **Rollback Strategy:**
@@ -369,10 +355,9 @@ This systematic approach minimizes risk and ensures reliable updates."
 
 **Common Issues & Solutions:**
 1. **Website Not Loading**: Check CloudFront distribution status, S3 bucket policy
-2. **API Errors**: Verify API Gateway configuration, Lambda function logs
-3. **Slow Performance**: Analyze CloudFront cache hit ratio, Lambda cold starts
-4. **WAF Blocking**: Review WAF logs, adjust rate limiting rules
-5. **Database Errors**: Check DynamoDB throttling, provisioned capacity
+2. **Slow Performance**: Analyze CloudFront cache hit ratio, S3 response times
+3. **WAF Blocking**: Review WAF logs, adjust rate limiting rules
+4. **Database Errors**: Check DynamoDB throttling, provisioned capacity
 
 **Troubleshooting Tools:**
 - **AWS Console**: Visual inspection of resource status
@@ -431,9 +416,8 @@ Always research AWS service limitations and regional requirements before impleme
 1. **AWS Documentation**: Official service documentation and best practices
 2. **Terraform Registry**: Community modules and examples
 3. **AWS Blog**: New service announcements and use cases
-4. **Serverless Framework**: Best practices for Lambda and API Gateway
-5. **Tech Communities**: Reddit, Stack Overflow, AWS User Groups
-6. **Online Courses**: AWS Training, Terraform training modules
+4. **Tech Communities**: Reddit, Stack Overflow, AWS User Groups
+5. **Online Courses**: AWS Training, Terraform training modules
 
 **Hands-on Practice:**
 - Build projects like this one to apply new concepts
@@ -484,10 +468,9 @@ Continuous learning is essential in the rapidly evolving cloud landscape."
 
 **Learning Focus:**
 1. **Advanced Terraform**: Use more advanced features like for_each, dynamic blocks
-2. **AWS Services**: Integrate more services like Step Functions, EventBridge
+2. **AWS Services**: Integrate more services like Lambda, API Gateway
 3. **Observability**: Implement distributed tracing and logging
 4. **Security**: Add more security layers and compliance controls
-5. **Serverless Patterns**: Event-driven architectures, microservices
 
 This project was an excellent learning foundation, and these enhancements would make it production-ready."
 
@@ -513,8 +496,8 @@ This project was an excellent learning foundation, and these enhancements would 
 ## 💡 **Final Interview Tips**
 
 ### **Before the Interview:**
-1. **Practice the Demo**: Be ready to show the live website and API endpoints
-2. **Know Your Numbers**: 40+ AWS resources, 7 core services, cost breakdown
+1. **Practice the Demo**: Be ready to show the live website
+2. **Know Your Numbers**: 34 AWS resources, 5 core services, cost breakdown
 3. **Prepare Stories**: Have specific examples ready
 4. **Review Code**: Be able to explain any line of Terraform code
 5. **Current Events**: Know recent AWS announcements
@@ -529,7 +512,6 @@ This project was an excellent learning foundation, and these enhancements would 
 ### **Key Phrases to Use:**
 - "Infrastructure as Code principles"
 - "AWS Well-Architected Framework"
-- "Serverless architecture"
 - "Defense in depth security"
 - "Cost optimization strategies"
 - "Scalability and performance"
@@ -537,12 +519,11 @@ This project was an excellent learning foundation, and these enhancements would 
 - "Best practices"
 
 ### **What Makes You Stand Out:**
-1. **Complete Project**: You built something real and functional with both frontend and backend
-2. **Serverless Expertise**: You understand modern serverless architecture patterns
-3. **Cost Awareness**: You understand and manage cloud costs
-4. **Security Focus**: You implemented multiple security layers
-5. **Documentation**: You created comprehensive guides
-6. **Practical Skills**: You can actually deploy and manage infrastructure
+1. **Complete Project**: You built something real and functional
+2. **Cost Awareness**: You understand and manage cloud costs
+3. **Security Focus**: You implemented multiple security layers
+4. **Documentation**: You created comprehensive guides
+5. **Practical Skills**: You can actually deploy and manage infrastructure
 
 **Remember**: You're not just showing code - you're demonstrating infrastructure thinking, problem-solving skills, and business understanding. Confidence comes from preparation, and you've prepared thoroughly!
 
@@ -550,14 +531,14 @@ This project was an excellent learning foundation, and these enhancements would 
 
 ## 🎯 **Interview Success Checklist**
 
-- [ ] Can explain the complete architecture flow (frontend + backend)
+- [ ] Can explain the complete architecture flow
 - [ ] Understands every AWS service and its purpose
 - [ ] Can explain any line of Terraform code
 - [ ] Knows cost implications and optimization strategies
 - [ ] Understands security best practices
 - [ ] Can troubleshoot common issues
 - [ ] Has specific examples and stories ready
-- [ ] Can demonstrate the live website and API endpoints
+- [ ] Can demonstrate the live website
 - [ ] Knows the deployment process
 - [ ] Has thoughtful questions prepared
 
