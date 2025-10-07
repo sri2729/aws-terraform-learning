@@ -1,24 +1,27 @@
 # Outputs for AWS Terraform Learning Project
 
-output "vpc_id" {
-  description = "ID of the VPC"
-  value       = module.vpc.vpc_id
-}
-
-output "vpc_cidr_block" {
-  description = "CIDR block of the VPC"
-  value       = module.vpc.vpc_cidr_block
-}
-
-output "public_subnet_ids" {
-  description = "IDs of the public subnets"
-  value       = module.vpc.public_subnet_ids
-}
-
-output "private_subnet_ids" {
-  description = "IDs of the private subnets"
-  value       = module.vpc.private_subnet_ids
-}
+# VPC Outputs - DISABLED (VPC module is commented out)
+# Uncomment these when you re-enable the VPC module
+#
+# output "vpc_id" {
+#   description = "ID of the VPC"
+#   value       = module.vpc.vpc_id
+# }
+#
+# output "vpc_cidr_block" {
+#   description = "CIDR block of the VPC"
+#   value       = module.vpc.vpc_cidr_block
+# }
+#
+# output "public_subnet_ids" {
+#   description = "IDs of the public subnets"
+#   value       = module.vpc.public_subnet_ids
+# }
+#
+# output "private_subnet_ids" {
+#   description = "IDs of the private subnets"
+#   value       = module.vpc.private_subnet_ids
+# }
 
 output "s3_bucket_id" {
   description = "ID of the S3 bucket"

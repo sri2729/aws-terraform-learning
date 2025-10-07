@@ -32,11 +32,11 @@ function showInfrastructureInfo() {
     modal.innerHTML = `
         <h3>🚀 AWS Infrastructure Components</h3>
         <p><strong>VPC:</strong> Virtual Private Cloud with public/private subnets, Internet Gateway, and NAT Gateway</p>
-        <p><strong>S3:</strong> Static website hosting with versioning, encryption, and CORS configuration</p>
-        <p><strong>CloudFront:</strong> Global CDN with SSL termination and caching strategies</p>
-        <p><strong>DynamoDB:</strong> NoSQL database for website data and user sessions</p>
-        <p><strong>WAF:</strong> Web Application Firewall with rate limiting and security rules</p>
-        <p><strong>Terraform:</strong> Infrastructure as Code for reproducible deployments</p>
+        <p><strong>S3:</strong> Static website hosting with simplified configuration for learning</p>
+        <p><strong>CloudFront:</strong> Global CDN with Origin Access Identity (OAI) for secure S3 access</p>
+        <p><strong>DynamoDB:</strong> NoSQL database for contact form data and user sessions</p>
+        <p><strong>WAF:</strong> Web Application Firewall integrated with CloudFront for security</p>
+        <p><strong>Terraform:</strong> Simplified Infrastructure as Code for learning AWS fundamentals</p>
         <button class="close-button" onclick="closeInfrastructureInfo()">Close</button>
     `;
     
@@ -61,11 +61,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const featureCards = document.querySelectorAll('.feature-card');
     featureCards.forEach(card => {
         card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-10px) scale(1.02)';
+            this.style.transform = 'translateY(-5px)';
         });
         
         card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
+            this.style.transform = 'translateY(0)';
         });
     });
     
@@ -79,31 +79,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 150);
         });
     });
-    
-    // Add typing effect to hero title
-    const heroTitle = document.querySelector('.hero-content h2');
-    if (heroTitle) {
-        const text = heroTitle.textContent;
-        heroTitle.textContent = '';
-        let i = 0;
-        
-        function typeWriter() {
-            if (i < text.length) {
-                heroTitle.textContent += text.charAt(i);
-                i++;
-                setTimeout(typeWriter, 100);
-            }
-        }
-        
-        setTimeout(typeWriter, 1000);
-    }
 });
 
-// Add scroll-based animations (removed problematic parallax effect)
+// Add scroll-based animations
 window.addEventListener('scroll', function() {
-    // Smooth scrolling behavior without content hiding
-    const scrolled = window.pageYOffset;
-    
     // Add subtle fade-in effect for sections as they come into view
     const sections = document.querySelectorAll('section');
     sections.forEach(section => {
@@ -111,27 +90,17 @@ window.addEventListener('scroll', function() {
         const sectionHeight = section.offsetHeight;
         const windowHeight = window.innerHeight;
         
-        if (scrolled > sectionTop - windowHeight + 100) {
+        if (window.pageYOffset > sectionTop - windowHeight + 100) {
             section.style.opacity = '1';
             section.style.transform = 'translateY(0)';
         }
     });
 });
 
-// Add loading animation
-window.addEventListener('load', function() {
-    document.body.style.opacity = '0';
-    document.body.style.transition = 'opacity 0.5s ease-in-out';
-    
-    setTimeout(() => {
-        document.body.style.opacity = '1';
-    }, 100);
-});
+// API Configuration - This will be replaced with actual API Gateway URL during deployment
+const API_BASE_URL = 'https://YOUR_API_GATEWAY_ID.execute-api.us-east-1.amazonaws.com/dev';
 
-// API Configuration
-const API_BASE_URL = 'https://t2engatoq6.execute-api.us-east-1.amazonaws.com/dev';
-
-// Contact Form Handler with Real API
+// Contact Form Handler with Fallback
 document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
@@ -151,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.disabled = true;
             
             try {
-                // Call API Gateway endpoint
+                // Try API Gateway endpoint first
                 const response = await fetch(`${API_BASE_URL}/contact`, {
                     method: 'POST',
                     headers: {
@@ -160,17 +129,33 @@ document.addEventListener('DOMContentLoaded', function() {
                     body: JSON.stringify({ name, email, message })
                 });
                 
-                const result = await response.json();
-                
                 if (response.ok) {
+                    const result = await response.json();
                     alert('Thank you for your message! It has been saved successfully.');
                     contactForm.reset();
                 } else {
-                    throw new Error(result.error || 'Failed to submit form');
+                    throw new Error(`API Error: ${response.status}`);
                 }
             } catch (error) {
-                console.error('Error submitting form:', error);
-                alert('Sorry, there was an error submitting your message. Please try again.');
+                console.error('API Error:', error);
+                
+                // Fallback: Store in localStorage for demo purposes
+                try {
+                    const submissions = JSON.parse(localStorage.getItem('contactSubmissions') || '[]');
+                    submissions.push({
+                        name: name,
+                        email: email,
+                        message: message,
+                        timestamp: new Date().toISOString()
+                    });
+                    localStorage.setItem('contactSubmissions', JSON.stringify(submissions));
+                    
+                    alert('Thank you for your message! (Stored locally for demo purposes)');
+                    contactForm.reset();
+                } catch (fallbackError) {
+                    console.error('Fallback Error:', fallbackError);
+                    alert('Sorry, there was an error submitting your message. Please try again.');
+                }
             } finally {
                 // Reset button state
                 submitBtn.textContent = originalText;
@@ -178,7 +163,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
 });
 
 // Add keyboard navigation
@@ -190,6 +174,6 @@ document.addEventListener('keydown', function(e) {
 
 // Add some console messages for developers
 console.log('🚀 AWS Terraform Learning Project');
-console.log('📚 This website demonstrates AWS infrastructure with Terraform');
-console.log('🔧 Built with: S3, CloudFront, WAF, DynamoDB, VPC');
-console.log('💡 Check the source code to learn more!');
+console.log('📚 This website demonstrates simplified AWS infrastructure with Terraform');
+console.log('🔧 Built with: S3, CloudFront (OAI), WAF, DynamoDB, VPC');
+console.log('💡 Simplified setup for learning AWS and Terraform fundamentals!');

@@ -10,12 +10,10 @@ terraform {
   }
 }
 
-# Configure the AWS Provider for us-east-1 (required for CloudFront WAF)
-provider "aws" {
-  region = "us-east-1"
-}
+# Note: WAF for CloudFront must be created in us-east-1 region
+# The provider configuration is handled by the main configuration
 
-# Create WAF Web ACL
+
 resource "aws_wafv2_web_acl" "main" {
   name  = "${var.project_name}-${var.environment}-web-acl"
   scope = "CLOUDFRONT"
@@ -35,7 +33,7 @@ resource "aws_wafv2_web_acl" "main" {
 
     statement {
       rate_based_statement {
-        limit              = 2000
+        limit              = 100
         aggregate_key_type = "IP"
       }
     }

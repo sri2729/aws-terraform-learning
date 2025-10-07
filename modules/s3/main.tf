@@ -1,6 +1,4 @@
 # S3 Module - Creates S3 bucket for static website hosting
-# This module sets up S3 with proper configuration for static website hosting
-
 # Generate a random suffix for bucket name to ensure uniqueness
 resource "random_string" "bucket_suffix" {
   length  = 8
@@ -19,23 +17,23 @@ resource "aws_s3_bucket" "website" {
 }
 
 # Configure bucket versioning
-resource "aws_s3_bucket_versioning" "website" {
-  bucket = aws_s3_bucket.website.id
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
+# resource "aws_s3_bucket_versioning" "website" {
+#   bucket = aws_s3_bucket.website.id
+#   versioning_configuration {
+#     status = "Enabled"
+#   }
+# }
 
 # Configure bucket server-side encryption
-resource "aws_s3_bucket_server_side_encryption_configuration" "website" {
-  bucket = aws_s3_bucket.website.id
+# resource "aws_s3_bucket_server_side_encryption_configuration" "website" {
+#   bucket = aws_s3_bucket.website.id
 
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
-    }
-  }
-}
+#   rule {
+#     apply_server_side_encryption_by_default {
+#       sse_algorithm = "AES256"
+#     }
+#   }
+# }
 
 # Configure bucket public access block
 # When using CloudFront with OAC, we can block public access for security
@@ -65,29 +63,29 @@ resource "aws_s3_bucket_website_configuration" "website" {
 # This ensures proper security by only allowing CloudFront to access the bucket
 
 # Create CORS configuration
-resource "aws_s3_bucket_cors_configuration" "website" {
-  bucket = aws_s3_bucket.website.id
+# resource "aws_s3_bucket_cors_configuration" "website" {
+#   bucket = aws_s3_bucket.website.id
 
-  cors_rule {
-    allowed_headers = ["*"]
-    allowed_methods = ["GET", "HEAD"]
-    allowed_origins = ["*"]
-    expose_headers  = ["ETag"]
-    max_age_seconds = 3000
-  }
-}
+#   cors_rule {
+#     allowed_headers = ["*"]
+#     allowed_methods = ["GET", "HEAD"]
+#     allowed_origins = ["*"]
+#     expose_headers  = ["ETag"]
+#     max_age_seconds = 3000
+#   }
+# }
 
 # Create lifecycle configuration
-resource "aws_s3_bucket_lifecycle_configuration" "website" {
-  bucket = aws_s3_bucket.website.id
+# resource "aws_s3_bucket_lifecycle_configuration" "website" {
+#   bucket = aws_s3_bucket.website.id
 
-  rule {
-    id     = "delete_old_versions"
-    status = "Enabled"
-    filter {}
+#   rule {
+#     id     = "delete_old_versions"
+#     status = "Enabled"
+#     filter {}
 
-    noncurrent_version_expiration {
-      noncurrent_days = 30
-    }
-  }
-}
+#     noncurrent_version_expiration {
+#       noncurrent_days = 30
+#     }
+#   }
+# }

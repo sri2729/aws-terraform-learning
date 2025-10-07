@@ -415,10 +415,13 @@ section {
     color: white;
     text-align: center;
     padding: 2rem 0;
+    margin-top: 2rem;
 }
 
 .footer p {
     margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.8;
 }
 
 /* Responsive Design */
@@ -426,10 +429,13 @@ section {
     .nav {
         flex-direction: column;
         gap: 1rem;
+        padding: 1rem;
     }
     
     .nav-menu {
         gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
     }
     
     .hero-content h2 {
@@ -442,8 +448,23 @@ section {
     
     .features-grid,
     .services-grid,
-    .steps {
+    .steps,
+    .summary-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .flow-diagram {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .flow-arrow {
+        transform: rotate(90deg);
+        margin: 1rem 0;
+    }
+    
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -620,6 +641,71 @@ section {
     font-size: 0.9rem;
     color: #666;
     font-weight: 500;
+}
+
+/* Simplified Approach Section */
+.simplified-approach {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 2rem;
+    border-radius: 15px;
+    margin: 2rem 0;
+    border-left: 5px solid #667eea;
+}
+
+.simplified-approach h3 {
+    color: #667eea;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.approach-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.approach-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.approach-card:hover {
+    transform: translateY(-3px);
+}
+
+.approach-card h4 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.approach-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.approach-card li {
+    padding: 0.5rem 0;
+    color: #555;
+    position: relative;
+    padding-left: 1.5rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.approach-card li:last-child {
+    border-bottom: none;
+}
+
+.approach-card li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #667eea;
+    font-weight: bold;
 }
 
 /* Animation for infrastructure info */

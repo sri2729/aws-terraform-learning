@@ -1,20 +1,30 @@
 # Lambda Functions for API endpoints
 
+# Create ZIP file for Lambda function
+data "archive_file" "contact_form_zip" {
+  type        = "zip"
+  output_path = "${path.module}/contact_form.zip"
+  source {
+    content = file("${path.module}/contact_form.py")
+    filename = "index.py"
+  }
+}
+
 # Contact Form Handler
 resource "aws_lambda_function" "contact_form" {
   filename         = "contact_form.zip"
   function_name    = "${var.project_name}-${var.environment}-contact-form"
   role            = aws_iam_role.lambda_role.arn
   handler         = "index.handler"
-  source_code_hash = data.archive_file.contact_form_zip.output_base64sha256
+  # source_code_hash = data.archive_file.contact_form_zip.output_base64sha256
   runtime         = "python3.9"
   timeout         = 30
 
-  environment {
-    variables = {
-      DYNAMODB_TABLE = var.dynamodb_table_name
-    }
-  }
+  # environment {
+  #   variables = {
+  #     DYNAMODB_TABLE = var.dynamodb_table_name
+  #   }
+  # }
 
   tags = {
     Name        = "${var.project_name}-${var.environment}-contact-form"
@@ -47,36 +57,36 @@ resource "aws_iam_role" "lambda_role" {
 }
 
 # IAM Policy for Lambda
-resource "aws_iam_role_policy" "lambda_policy" {
-  name = "${var.project_name}-${var.environment}-lambda-policy"
-  role = aws_iam_role.lambda_role.id
+# resource "aws_iam_role_policy" "lambda_policy" {
+#   name = "${var.project_name}-${var.environment}-lambda-policy"
+#   role = aws_iam_role.lambda_role.id
 
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Action = [
-          "logs:CreateLogGroup",
-          "logs:CreateLogStream",
-          "logs:PutLogEvents"
-        ]
-        Resource = "arn:aws:logs:*:*:*"
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "dynamodb:GetItem",
-          "dynamodb:PutItem",
-          "dynamodb:UpdateItem",
-          "dynamodb:Query",
-          "dynamodb:Scan"
-        ]
-        Resource = var.dynamodb_table_arn
-      }
-    ]
-  })
-}
+#   policy = jsonencode({
+#     Version = "2012-10-17"
+#     Statement = [
+#       {
+#         Effect = "Allow"
+#         Action = [
+#           "logs:CreateLogGroup",
+#           "logs:CreateLogStream",
+#           "logs:PutLogEvents"
+#         ]
+#         Resource = "arn:aws:logs:*:*:*"
+#       },
+#       {
+#         Effect = "Allow"
+#         Action = [
+#           "dynamodb:GetItem",
+#           "dynamodb:PutItem",
+#           "dynamodb:UpdateItem",
+#           "dynamodb:Query",
+#           "dynamodb:Scan"
+#         ]
+#         Resource = var.dynamodb_table_arn
+#       }
+#     ]
+#   })
+# }
 
 # Attach basic execution role
 resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
@@ -85,12 +95,12 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
 }
 
 # Create ZIP files for Lambda functions
-data "archive_file" "contact_form_zip" {
-  type        = "zip"
-  output_path = "contact_form.zip"
-  source {
-    content = file("${path.module}/contact_form.py")
-    filename = "index.py"
-  }
-}
+# data "archive_file" "contact_form_zip" {
+#   type        = "zip"
+#   output_path = "contact_form.zip"
+#   source {
+#     content = file("${path.module}/contact_form.py")
+#     filename = "index.py"
+#   }
+# }
 

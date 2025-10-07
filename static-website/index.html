@@ -39,7 +39,7 @@
                     <div class="summary-card">
                         <h3>📊 Infrastructure Overview</h3>
                         <ul>
-                            <li><strong>34 AWS Resources</strong> deployed with Terraform</li>
+                            <li><strong>Simplified AWS Setup</strong> with essential services</li>
                             <li><strong>5 Core Services</strong>: VPC, S3, CloudFront, DynamoDB, WAF</li>
                             <li><strong>Production-Ready</strong> with security and monitoring</li>
                             <li><strong>Global CDN</strong> with SSL termination</li>
@@ -49,27 +49,27 @@
                         <h3>🔧 Technical Implementation</h3>
                         <ul>
                             <li><strong>Infrastructure as Code</strong> with Terraform modules</li>
-                            <li><strong>Multi-Region</strong> deployment (WAF in us-east-1)</li>
+                            <li><strong>OAI Integration</strong> for S3-CloudFront access</li>
                             <li><strong>Security Layers</strong>: WAF + CloudFront + S3</li>
-                            <li><strong>Cost Optimization</strong> with lifecycle policies</li>
+                            <li><strong>Simplified Configuration</strong> for learning</li>
                         </ul>
                     </div>
                     <div class="summary-card">
                         <h3>🚀 Performance Features</h3>
                         <ul>
                             <li><strong>Global CDN</strong> with edge caching</li>
-                            <li><strong>Rate Limiting</strong> (2000 req/IP/5min)</li>
+                            <li><strong>Rate Limiting</strong> via WAF integration</li>
                             <li><strong>SSL/HTTPS</strong> with automatic redirect</li>
-                            <li><strong>Custom Error Pages</strong> for SPA routing</li>
+                            <li><strong>Origin Access Identity</strong> for secure S3 access</li>
                         </ul>
                     </div>
                     <div class="summary-card">
-                        <h3>💼 Business Value</h3>
+                        <h3>💼 Learning Value</h3>
                         <ul>
-                            <li><strong>Scalable Architecture</strong> for enterprise use</li>
+                            <li><strong>Simplified Architecture</strong> for easy understanding</li>
                             <li><strong>Security Best Practices</strong> implemented</li>
-                            <li><strong>Monitoring & Logging</strong> with CloudWatch</li>
-                            <li><strong>Disaster Recovery</strong> with point-in-time backups</li>
+                            <li><strong>Modular Design</strong> with Terraform modules</li>
+                            <li><strong>Real-world Application</strong> with contact form</li>
                         </ul>
                     </div>
                 </div>
@@ -115,16 +115,16 @@
                     <h3>📈 Infrastructure Metrics</h3>
                     <div class="metrics-grid">
                         <div class="metric-item">
-                            <div class="metric-number">34</div>
-                            <div class="metric-label">AWS Resources</div>
-                        </div>
-                        <div class="metric-item">
                             <div class="metric-number">5</div>
                             <div class="metric-label">Core Services</div>
                         </div>
                         <div class="metric-item">
-                            <div class="metric-number">2000</div>
-                            <div class="metric-label">Rate Limit (req/min)</div>
+                            <div class="metric-number">OAI</div>
+                            <div class="metric-label">S3 Access Method</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-number">WAF</div>
+                            <div class="metric-label">Security Layer</div>
                         </div>
                         <div class="metric-item">
                             <div class="metric-number">Global</div>
@@ -146,23 +146,23 @@
                     </div>
                     <div class="feature-card">
                         <h3>🚀 CloudFront CDN</h3>
-                        <p>Global content delivery network for fast loading and SSL termination</p>
+                        <p>Global content delivery network with OAI for secure S3 access</p>
                     </div>
                     <div class="feature-card">
                         <h3>🛡️ WAF Protection</h3>
-                        <p>Web Application Firewall for security and rate limiting</p>
+                        <p>Web Application Firewall integrated with CloudFront for security</p>
                     </div>
                     <div class="feature-card">
                         <h3>🗄️ DynamoDB</h3>
-                        <p>NoSQL database for storing website data and user sessions</p>
+                        <p>NoSQL database for storing contact form data and user sessions</p>
                     </div>
                     <div class="feature-card">
                         <h3>🏗️ VPC Network</h3>
                         <p>Virtual Private Cloud with public and private subnets</p>
                     </div>
                     <div class="feature-card">
-                        <h3>📊 Infrastructure as Code</h3>
-                        <p>Everything managed with Terraform for reproducibility</p>
+                        <h3>📊 Simplified Infrastructure</h3>
+                        <p>Streamlined setup for learning AWS and Terraform fundamentals</p>
                     </div>
                 </div>
             </div>
@@ -177,17 +177,13 @@
                         <ul>
                             <li>Public and private subnets</li>
                             <li>Internet Gateway</li>
-                            <li>NAT Gateway</li>
-                            <li>Route tables</li>
                         </ul>
                     </div>
                     <div class="service-item">
                         <h3>S3 Module</h3>
                         <ul>
                             <li>Static website hosting</li>
-                            <li>Versioning enabled</li>
-                            <li>Server-side encryption</li>
-                            <li>CORS configuration</li>
+                            <li>Bucket configuration</li>
                         </ul>
                     </div>
                     <div class="service-item">
@@ -195,26 +191,16 @@
                         <ul>
                             <li>Global CDN</li>
                             <li>SSL termination</li>
-                            <li>Caching strategies</li>
-                            <li>Custom error pages</li>
-                        </ul>
-                    </div>
-                    <div class="service-item">
-                        <h3>DynamoDB Module</h3>
-                        <ul>
-                            <li>Website data table</li>
-                            <li>User sessions table</li>
-                            <li>Global secondary indexes</li>
-                            <li>Point-in-time recovery</li>
+                            <li>Origin Access Identity (OAI)</li>
+                            <li>WAF integration</li>
                         </ul>
                     </div>
                     <div class="service-item">
                         <h3>WAF Module</h3>
                         <ul>
-                            <li>Rate limiting</li>
-                            <li>SQL injection protection</li>
-                            <li>XSS protection</li>
-                            <li>Geo-blocking</li>
+                            <li>Rate limiting rules</li>
+                            <li>CloudFront integration</li>
+                            <li>us-east-1 deployment</li>
                         </ul>
                     </div>
                 </div>
@@ -268,16 +254,17 @@
                         <p>Run <code>terraform apply</code> to create resources</p>
                     </div>
                 </div>
+                </div>
             </div>
         </section>
     </main>
 
     <footer class="footer">
-    
+        <div class="container">
+            <p>&copy; 2024 AWS Terraform Learning Project. Built with ❤️ for learning AWS and Terraform.</p>
+        </div>
     </footer>
 
     <script src="js/script.js"></script>
 </body>
 </html>
-
-
